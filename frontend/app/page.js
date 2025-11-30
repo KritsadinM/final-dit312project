@@ -11,14 +11,14 @@ export default function Page() {
     async function getMovies() {
       try {
         const apiHost = process.env.NEXT_PUBLIC_API_HOST;
-        const res = await fetch(`${apiHost}/movies`);
-
         console.log("API_HOST =", apiHost);
-        
+
+        const res = await fetch(`${apiHost}/movies`, { cache: "no-store" });
         if (!res.ok) throw new Error("Failed to fetch");
 
         const data = await res.json();
         setRows(data);
+
       } catch (err) {
         setError(err.message);
       } finally {
@@ -31,118 +31,168 @@ export default function Page() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-16 h-16 border-4 border-purple-400 border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-purple-200 text-lg font-medium">Loading movies...</p>
+      <main className="container">
+        <div className="skeleton-grid">
+          {Array(6)
+            .fill(0)
+            .map((_, i) => (
+              <div key={i} className="skeleton-card"></div>
+            ))}
         </div>
+
+        <style jsx>{`
+          .skeleton-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
+            padding: 20px;
+          }
+          .skeleton-card {
+            height: 260px;
+            background: linear-gradient(90deg, #eee, #ddd, #eee);
+            border-radius: 12px;
+            animation: pulse 1.6s infinite ease-in-out;
+          }
+          @keyframes pulse {
+            0% { background-position: 0%; }
+            100% { background-position: 200%; }
+          }
+        `}</style>
       </main>
     );
   }
 
   if (error) {
     return (
-      <main className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
-        <div className="bg-red-500/10 border border-red-500/50 rounded-xl p-8 max-w-md backdrop-blur-sm">
-          <h2 className="text-red-400 text-xl font-bold mb-2">Error</h2>
-          <p className="text-red-200">{error}</p>
-        </div>
+      <main className="container">
+        <div className="error-box">⚠ Error: {error}</div>
+
+        <style jsx>{`
+          .error-box {
+            margin: 40px auto;
+            padding: 20px 25px;
+            border-radius: 10px;
+            background: #ffe5e5;
+            border: 1px solid #ffb2b2;
+            color: #b10000;
+            font-size: 18px;
+            width: fit-content;
+          }
+        `}</style>
       </main>
     );
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
-      <div className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
-        <header className="text-center mb-16 animate-fade-in">
-          <h1 className="text-5xl sm:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 mb-4">
-            Movies
-          </h1>
-          <p className="text-xl text-purple-200/80 font-light">
-            หนังที่สุดในใจ
-          </p>
-          <div className="mt-6 h-1 w-32 mx-auto bg-gradient-to-r from-transparent via-purple-400 to-transparent rounded-full"></div>
-        </header>
+    <main className="container">
+      <header className="header">
+        <h1 className="title">🎬 Movies</h1>
+        <p className="subtitle">หนังที่สุดในใจ</p>
+      </header>
 
-        {!rows || rows.length === 0 ? (
-          <div className="text-center py-20">
-            <div className="inline-block p-8 bg-purple-500/10 rounded-2xl backdrop-blur-sm border border-purple-500/20">
-              <p className="text-purple-300 text-lg">No movies found.</p>
-            </div>
-          </div>
-        ) : (
-          <section 
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" 
-            aria-live="polite"
-          >
-            {rows.map((movie, index) => (
-              <article
-                key={movie.id}
-                className="group bg-slate-800/50 backdrop-blur-sm rounded-2xl overflow-hidden border border-slate-700/50 hover:border-purple-500/50 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-purple-500/20"
-                tabIndex={0}
-                style={{
-                  animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both`
-                }}
-              >
-                {movie.coverimage && (
-                  <div className="relative overflow-hidden aspect-[16/9] bg-slate-900">
-                    <img
-                      src={movie.coverimage}
-                      alt={movie.name}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-60"></div>
-                  </div>
-                )}
-                
-                <div className="p-6">
-                  <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-purple-400 transition-colors duration-300">
-                    {movie.name}
-                  </h3>
-                  
-                  {movie.detail && (
-                    <p className="text-slate-300 mb-4 leading-relaxed line-clamp-3">
-                      {movie.detail}
-                    </p>
-                  )}
-                  
-                  <div className="flex items-center gap-3 pt-4 border-t border-slate-700/50">
-                    <div className="flex items-center gap-2 text-sm text-slate-400">
-                      <svg className="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                      </svg>
-                      <span className="font-mono text-xs">
-                        {movie.latitude}, {movie.longitude}
-                      </span>
-                    </div>
-                  </div>
+      {!rows || rows.length === 0 ? (
+        <div className="empty">No movies found.</div>
+      ) : (
+        <section className="grid">
+          {rows.map((x) => (
+            <article key={x.id} className="card">
+              {x.coverimage && (
+                <div className="media">
+                  <img src={x.coverimage} alt={x.name} className="img" />
                 </div>
-              </article>
-            ))}
-          </section>
-        )}
-      </div>
+              )}
+              <div className="body">
+                <h3 className="card-title">{x.name}</h3>
+                {x.detail && <p className="detail">{x.detail}</p>}
+
+                <div className="meta">
+                  <small>
+                    🎯 Lat: <span className="code">{x.latitude}</span> • Lng:
+                    <span className="code"> {x.longitude}</span>
+                  </small>
+                </div>
+              </div>
+            </article>
+          ))}
+        </section>
+      )}
 
       <style jsx>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+        .container {
+          max-width: 1000px;
+          margin: auto;
+          padding: 20px;
         }
-
-        .line-clamp-3 {
-          display: -webkit-box;
-          -webkit-line-clamp: 3;
-          -webkit-box-orient: vertical;
+        .header {
+          text-align: center;
+          margin-bottom: 30px;
+        }
+        .title {
+          font-size: 36px;
+          font-weight: 700;
+          color: #1a1a1a;
+        }
+        .subtitle {
+          margin-top: 5px;
+          font-size: 18px;
+          color: #555;
+        }
+        .grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+          gap: 24px;
+        }
+        .card {
+          background: #fff;
+          border-radius: 14px;
           overflow: hidden;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+          transition: 0.25s ease;
+          cursor: pointer;
+        }
+        .card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+        .media {
+          width: 100%;
+          height: 160px;
+          overflow: hidden;
+        }
+        .img {
+          width: 100%;
+          height: 160px;
+          object-fit: cover;
+          transition: 0.3s;
+        }
+        .card:hover .img {
+          transform: scale(1.05);
+        }
+        .body {
+          padding: 16px;
+        }
+        .card-title {
+          font-size: 20px;
+          font-weight: bold;
+          margin-bottom: 8px;
+        }
+        .detail {
+          font-size: 14px;
+          color: #444;
+          height: 48px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .meta {
+          margin-top: 10px;
+          color: #666;
+          font-size: 13px;
+        }
+        .empty {
+          text-align: center;
+          margin-top: 40px;
+          font-size: 20px;
+          color: #777;
         }
       `}</style>
     </main>
