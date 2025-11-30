@@ -15,7 +15,7 @@ INSERT INTO `movies`
 VALUES
 ('The Dark Knight',
  'แบทแมนต้องเผชิญหน้ากับโจ๊กเกอร์ ผู้สร้างความโกลาหลให้เมืองก็อธแธม',
- 'dark_knight.jpg',
+ 'https://rollingstonephilippines.com/wp-content/uploads/2025/07/knight_h.webp',
  'Action',
  2008,
  'Christopher Nolan',
@@ -24,7 +24,7 @@ VALUES
 
 ('Interstellar',
  'ภารกิจเดินทางข้ามกาแล็กซีเพื่อค้นหาดาวดวงใหม่ให้มนุษยชาติ',
- 'interstellar.jpg',
+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQB2qCaYbzrrZFTYTDI6tV6Vk9GjAClSRrQh1OuZKR0yNjzEBnkHLlji1V2M2lCRiQNnFLcqcBqo1MOMggeh0ll3BmEKE6Wgx3mLAL4PKQ&s=10',
  'Sci-Fi',
  2014,
  'Christopher Nolan',
@@ -33,7 +33,7 @@ VALUES
 
 ('Parasite',
  'ครอบครัวฐานะยากจนพยายามเข้าไปทำงานในบ้านคนรวยจนเกิดเรื่องพลิกผัน',
- 'parasite.jpg',
+ 'https://m.media-amazon.com/images/S/pv-target-images/f1718e6f583273425e1b200c846ce733332570558e4b6dc1e1a3bb24a0bf1fe2._SX1080_FMjpg_.jpg',
  'Thriller',
  2019,
  'Bong Joon-ho',
@@ -42,7 +42,7 @@ VALUES
 
 ('Avengers: Endgame',
  'ทีมอเวนเจอร์รวมพลังครั้งสุดท้ายเพื่อหยุดธานอสและกู้จักรวาล',
- 'endgame.jpg',
+ 'https://www.lcdtvthailand.com/wp-content/uploads/2021/03/Avengers-Endgame-Review-By-Roman-OG.jpg',
  'Action',
  2019,
  'Anthony & Joe Russo',
@@ -51,7 +51,7 @@ VALUES
 
 ('รถไฟฟ้า มาหานะเธอ',
  'เรื่องราวความรักของสาวออฟฟิศกับหนุ่มสถาปนิกสุดอบอุ่น',
- 'rotfaifah.jpg',
+ 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbagPP7hrOKsvf9yN0wp4QnTl02Y756hHIAw&s',
  'Romantic Comedy',
  2009,
  'ยงยุทธ ทองกองทุน',

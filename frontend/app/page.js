@@ -50,7 +50,7 @@ export default function Page() {
     <main className="container">
       <header className="header">
         <h1 className="title">movies</h1>
-        <p className="subtitle">Discover points of interest nearby</p>
+        <p className="subtitle">หนังที่สุดในใจ</p>
       </header>
 
       {!rows || rows.length === 0 ? (
